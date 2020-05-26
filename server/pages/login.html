@@ -1,0 +1,58 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>醉品茶城登录页面</title><link rel="stylesheet" href="../css/initCss.css"><link rel="stylesheet" href="../css/login.css"></head><body><div id="bigbox"><h1>醉品茶城登录页面，去<a href="register.html">注册</a></h1><p><a href="../index.html">返回到首页</a></p><div id="box">用户名：<input type="text" id="user"><br>密&nbsp;&nbsp;&nbsp;&nbsp;码：<input type="text" id="pass"><br><input type="button" value="登录" id="submit"> <span class="msg"></span></div></div></body></html><script src="../js/xm_public.js"></script><script>class login{
+		constructor(){
+			// 选择各种元素
+			this.user=document.getElementById("user");
+			this.pass=document.getElementById("pass");
+			this.submit=document.getElementById("submit");
+			this.msg=document.querySelector(".msg");
+			// 提前准备接口
+			this.url="http://api.icodeilife.cn:81/user";
+			// 绑定事件
+			this.addEvent();
+		}
+		addEvent(){
+			var that=this;
+			this.submit.onclick=function(){
+				//注册请求之前获取输入框内容
+				that.u=that.user.value;
+				that.p=that.pass.value;
+				that.load();
+			}
+		}
+		load(){
+			ajax_promise({
+				url:this.url,
+				data:{
+					type:"login",
+					user:this.u,
+					pass:this.p
+				}
+			}).then((res)=>{
+				console.log(res);
+				this.res=JSON.parse(res);
+				this.display();
+			})
+		}
+		display(){
+			switch(this.res.code){
+				case 0:
+				   this.msg.innerHTML=this.res.msg+",3秒后跳转到注册页面";
+				   setTimeout(()=>{
+					   location.href="register.html";
+				   },3000);
+				   break;
+				case 1:
+				   this.msg.innerHTML="登录成功，3秒后到首页";
+				   setTimeout(()=>{
+					   location.href="../index.html";
+				   },3000);
+				   sessionStorage.setItem("userMsg",JSON.stringify(this.res.msg));
+				   break;
+				case 2:
+				   this.msg.innerHTML=this.res.msg+"，请重新输入";
+				   this.user.value=this.pass.value="";
+				   this.user.focus();
+			}
+		}
+	}
+	new login;</script>

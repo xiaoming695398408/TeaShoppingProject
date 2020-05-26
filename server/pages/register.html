@@ -1,0 +1,53 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>醉品茶城注册页面</title><link rel="stylesheet" href="../css/initCss.css"><link rel="stylesheet" href="../css/register.css"></head><body><div id="bigbox"><h1>醉品茶城的注册页面，跳转到<a href="login.html">登录页面</a></h1><p><a href="../index.html">返回到首页</a></p><div id="box">用户名：<input type="text" id="user"><br>密&nbsp;&nbsp;&nbsp;&nbsp;码：<input type="text" id="pass"><br>手机号：<input type="text" id="tel"><br>邮&nbsp;&nbsp;&nbsp;&nbsp;箱：<input type="text" id="email"><br><input type="button" value="注册" id="submit"> <span class="msg"></span></div></div></body></html><script src="../js/xm_public.js"></script><script>class Register{
+		constructor() {
+		    this.user=document.getElementById("user");
+			this.pass=document.getElementById("pass");
+			this.tel=document.getElementById("tel");
+			this.email=document.getElementById("email");
+			this.submit=document.getElementById("submit");
+			this.msg=document.querySelector(".msg");
+			// 提前准备接口
+			this.url="http://api.icodeilife.cn:81/user";
+			// 绑定事件
+			this.addEvent();
+		}
+		addEvent(){
+			var that=this;
+			this.submit.onclick=function(){
+				that.u=that.user.value;
+				that.p=that.pass.value;
+				that.t=that.tel.value;
+				that.e=that.email.value;
+				// 开启请求
+				that.load();
+			}
+		}
+		load(){
+				ajax_promise({
+					url:this.url,
+					data:{
+						type:"register",
+						user:this.u,
+						pass:this.p,
+						tel:this.t,
+						email:this.e
+					}
+				}).then((res)=>{
+					console.log(res);
+					this.res=JSON.parse(res);
+					this.display();
+				})
+		}
+		display(){
+				if(this.res.code==1){
+					this.msg.innerHTML=this.res.msg+",3秒后到登录页面";
+					setTimeout(()=>{
+						location.href="login.html";
+					},3000);
+				}else{
+					this.msg.innerHTML=this.res.msg;
+				}
+		}
+		
+	}
+	new Register;</script>
