@@ -1,0 +1,3 @@
+# TeaShoppingProject
+#myTeaProject该文件为未压缩和编译的开发版
+#需将serve文件放置在服务器环境中，即可正常运行该项目
